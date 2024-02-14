@@ -1,0 +1,53 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://unpkg.com/obniz@3.24.0/obniz.js"></script>
+  <script src="jquery-ui.min.js"></script> 
+  <link rel="stylesheet" href="jquery-ui.min.css"> 
+  <script src="datepicker-ja.js"></script> 
+  <script type="text/javascript">
+  
+    let obniz = new Obniz("8571-1744");  //自分のobnizの番号に書き換えて下さい
+    /*  ②ここに必要な変数宣言を書きます  */
+    let fLED;
+    obniz.onconnect = async function () {
+      /*  ③ここに様々なJavaScriptの処理を書きます  */
+     const days = new Date();
+	const today =days.getDay(); 
+	if(today == 0 || 6){
+      fLED = obniz.wired("WS2811", {gnd:1, vcc:2, din:3});
+        fLED.rgb(0,   0,   0);      //黒く点灯
+      }
+     else if(today == 1){
+      fLED = obniz.wired("WS2811", {gnd:1, vcc:2, din:3});
+        fLED.rgb(  0, 255,   0);      //緑に点灯 //カン・ビン //植木剪定材
+    }
+    else if(today == 2 || 5){
+      fLED = obniz.wired("WS2811", {gnd:1, vcc:2, din:3});
+      fLED.rgb(255,   0,   0);      //赤く点灯 //燃やすゴミ
+      }
+      if(today == 3){
+      fLED = obniz.wired("WS2811", {gnd:1, vcc:2, din:3});
+      fLED.rgb(255, 255, 0);      //青く点灯 //ペットボトル //紙類・布類
+     }
+    else if(today == 4){
+      fLED = obniz.wired("WS2811", {gnd:1, vcc:2, din:3});
+      fLED.rgb(  255,   0, 255);      //紫に点灯 //容器包装プラスチック
+      }
+}
+  function OnButtonClick() {
+      fLED.rgb(0,   0,   0);      //黒く点灯
+      }
+ 
+  </script>
+  <script> $(function() { $("#dp").datepicker({ defaultDate : new Date(), dateFormat : 'yy/mm/dd(DD)', showWeek : true, showOtherMonths : true, selectOtherMonths : true, changeYear : true, changeMonth : true, numberOfMonths : [2,2], showOn : "both", buttonText : "カレンダーを表示", showButtonPanel : true, currentText : "今日", closeText : "閉じる", }); $( "#dp" ).datepicker( "setDate", new Date()); }); </script> 
+</head>
+<body>
+<input type="button" value="LED消灯" onclick="OnButtonClick(); disabled = true"/>
+<p>Date:<input type="text"  name="date" id="dp"></p> 
+  <div id="obniz-debug"></div>
+  <h1>ゴミ出し忘れ防止チェッカー</h1>
+  <!--  ①ここに任意のHTMLを書きます -->
+</body>
+
